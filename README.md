@@ -6,3 +6,8 @@ NextJS
 Clerk for auth
 
 Dark Mode - next-themes - provider - https://ui.shadcn.com/docs/dark-mode
+
+
+
+Personalitys:
+Shakira

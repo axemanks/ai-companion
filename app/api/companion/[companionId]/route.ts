@@ -1,6 +1,6 @@
-// dynamic route for companion pages
+// endpoint: /api/companion/[companionId]
 import prismadb from "@/lib/prismadb";
-import { currentUser } from "@clerk/nextjs";
+import { auth, currentUser } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
 export async function PATCH(
@@ -28,6 +28,7 @@ export async function PATCH(
         const companion = await prismadb.companion.update({
             where: {
                 id: params.companionId,
+                userId: user.id,
             },
             data: {
             categoryId,
@@ -45,6 +46,32 @@ export async function PATCH(
         
     } catch (error) {
         console.log(error, "[COMPANION_PATCH]");
+        return new NextResponse("Internal Error", { status: 500 })
+    }
+}
+
+// Delete
+export async function DELETE(
+    request: Request,
+    { params }: {params: { companionId: string}}
+) {
+    try {
+        // get user Id
+        const { userId} = auth(); // clerk
+        // Check for userId
+        if (!userId) {
+            return new NextResponse("Unauthorized", {status: 401})
+        }
+        const companion = await prismadb.companion.delete({
+            where: {
+                userId,
+                id: params.companionId,
+            }
+        });
+        
+        return NextResponse.json(companion);
+    } catch (error) {
+        console.log("[COMPANION_DELETE]", error);
         return new NextResponse("Internal Error", { status: 500 })
     }
 }
