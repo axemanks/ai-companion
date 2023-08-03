@@ -68,6 +68,7 @@ export async function POST(
         }
         // create memory manager
         const memoryManager = await MemoryManager.getInstance();
+        // Get Latest
         const records = await memoryManager.readLatestHistory(companionKey);
         // check if records exist
         if (records.length === 0){
@@ -75,7 +76,7 @@ export async function POST(
             await memoryManager.seedChatHistory(companion.seed, "\n\n", companionKey);
         }
 
-        // Write to history with prompt
+        // Write prompt to history
         await memoryManager.writeToHistory("User: " + prompt + "\n", companionKey);
 
         // fetch recent chat history
