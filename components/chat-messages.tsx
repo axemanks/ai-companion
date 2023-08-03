@@ -1,4 +1,4 @@
-// component to display chat messages
+// Chat messages component- will list out each message
 "use client"
 
 import { Companion } from "@prisma/client";

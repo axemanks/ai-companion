@@ -1,3 +1,4 @@
+// Root Page
 import { Categories } from '@/components/Categories';
 import { Companions } from '@/components/Companions';
 import { SearchInput } from '@/components/search-input';

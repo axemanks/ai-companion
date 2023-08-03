@@ -1,3 +1,4 @@
+// Input field at bottom of messages screen
 "use client"
 
 import { ChangeEvent, FormEvent } from "react";

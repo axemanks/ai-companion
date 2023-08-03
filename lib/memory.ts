@@ -81,7 +81,7 @@ export class MemoryManager {
       console.log("Companion key set incorrectly");
       return "";
     }
-    // if successfule, write to history
+    // if successful, write to history
     const key = this.generateRedisCompanionKey(companionKey);
     // add to history via zadd from redis - score is the time
     const result = await this.history.zadd(key, {

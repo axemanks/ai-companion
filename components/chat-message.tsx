@@ -1,3 +1,4 @@
+// Component to display each message - includes the icons for edit and delete
 'use client';
 
 import { useTheme } from 'next-themes';
