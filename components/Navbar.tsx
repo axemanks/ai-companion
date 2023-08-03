@@ -9,7 +9,12 @@ import { cn } from "@/lib/utils"; // util to combine tailwind classes and custom
 import { Button } from "./ui/button";
 import { ModeToggle } from "./ui/mode-toggle";
 import { MobileSidebar } from "./mobile-sidebar";
+import { useProModal } from "@/hooks/use-pro-modal";
 
+
+interface NavbarProps {
+    isPro: boolean;
+};
 
 
 // Use Poppins
@@ -18,7 +23,12 @@ const font = Poppins({
     subsets:["latin"]
 })
 
-export const Navbar = () => {
+export const Navbar = ({
+    isPro,
+}: NavbarProps) => {
+    const proModal = useProModal();
+
+
     return (
     <div className="fixed w-full z-50 flex justify-between items-center py-2 px-4 border-b border-primary/10 bg-secondary h-16">
         <div className="flex items-center">
@@ -31,10 +41,12 @@ export const Navbar = () => {
         </div>
         {/* User button */}
         <div className="flex items-center gap-x-3">
-            <Button size="sm" variant="premium">
+            {!isPro && (
+            <Button size="sm" variant="premium" onClick={proModal.onOpen}>
                 Upgrade
                 <Sparkles className="h-4 w-4 fill-white text-white ml-2" />
             </Button>
+            )}
             <ModeToggle />
             <UserButton afterSignOutUrl="/" />
         </div>

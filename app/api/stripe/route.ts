@@ -1,79 +1,77 @@
-// Endpoint for stripe
+import { auth, currentUser } from '@clerk/nextjs';
+import { NextResponse } from 'next/server';
 
-import { auth, currentUser } from "@clerk/nextjs";
-import { NextResponse } from "next/server";
+import prismadb from '@/lib/prismadb';
+import { stripe } from '@/lib/stripe';
+import { absoluteUrl } from '@/lib/utils';
 
-import prismadb from "@/lib/prismadb";
-import { stripe } from "@/lib/stripe";
-import { absoluteUrl } from "@/lib/utils";
-
-// settings url
-const settingsUrl = absoluteUrl("/settings");
+// Todo- needed to hard code the settingsURL to "http://localhost:3000/settings"
+// find out why
+const settingsUrl = absoluteUrl('/settings');
 
 export async function GET() {
-    try {
-        // get userID from clerk
-        const { userId } = auth();
-        // get user
-        const user = await currentUser();
-        // check if user exists
-        if(!userId || !user) {
-            return new NextResponse("Unauthorized", { status: 401 });
-        }
-        // if not subscribed redirect to subscription page, if subscribed redirect to settings page
-        // check for active sub
-        const userSubscription = await prismadb.userSubscription.findUnique({
-            where: {
-                userId: userId,
-            }
-        });
-        // if there is a subscription and stripe customer id
-        if(userSubscription && userSubscription.stripeCustomerId){
-            // create stripe session to billing portal
-            const stripeSession = await stripe.billingPortal.sessions.create({
-                customer: userSubscription.stripeCustomerId,
-                // return to settings
-                return_url: settingsUrl,
-            });
-
-            return new NextResponse(JSON.stringify({ url: stripeSession.url }));
-        }
-        // If not subscribed, redirect to checkout session
-        const stripeSession = await stripe.checkout.sessions.create({
-            success_url: settingsUrl,
-            cancel_url: settingsUrl,
-            payment_method_types: ["card","paypal","klarna"],
-            mode: "subscription",
-            billing_address_collection: "auto",
-            customer_email: user.emailAddresses[0].emailAddress, // from currentUser();
-            // options for subscription
-            line_items: [
-                // Add each item in it's own object
-                {
-                    price_data: {
-                        currency: "USD",
-                        product_data: {
-                            name: "Companion Pro",
-                            description: "Create Custom AI Companions",
-                        },
-                        unit_amount: 999, // $9.99
-                        recurring: {
-                            interval: "month",
-                        }
-                    },
-                    quantity: 1,
-                }
-            ],
-            // stripe will call our webhook with the userId, so we know which subscription to update
-            metadata: {
-                userid: userId,
-            }
-        })
-        // Return the stripe session
-        return new NextResponse(JSON.stringify({ url: stripeSession.url }))
-
-    } catch (error) {
-        console.log("[STRIPE_GET]", error);
-        return new NextResponse("Internal Server Error", { status: 500 });
+  try {
+    const { userId } = auth();
+    const user = await currentUser();
+    //console.log("user", user)
+    //console.log('userId', userId)
+    if (!userId || !user) {
+      return new NextResponse('Unauthorized', { status: 401 });
     }
+    //console.log("Attempting to find subscription")
+    const userSubscription = await prismadb.userSubscription.findUnique({
+      where: {
+        userId,
+      },
+    });
+
+    //console.log("User Sub:", userSubscription)
+    //console.log("Stripe Customer Id:", userSubscription?.stripeCustomerId)
+
+    if (userSubscription && userSubscription.stripeCustomerId) {
+      const stripeSession = await stripe.billingPortal.sessions.create({
+        customer: userSubscription.stripeCustomerId,
+        return_url: settingsUrl,
+      });
+
+      return new NextResponse(JSON.stringify({ url: stripeSession.url }));
+    }
+    //console.log("No sub found, creating checkout session...")
+    const stripeSession = await stripe.checkout.sessions.create({
+      success_url: settingsUrl,
+      cancel_url: settingsUrl,
+      payment_method_types: ['card'],
+      mode: 'subscription',
+      billing_address_collection: 'auto',
+      customer_email: user.emailAddresses[0].emailAddress,
+      line_items: [
+        {
+          price_data: {
+            currency: 'USD',
+            product_data: {
+              name: 'Companion Pro',
+              description: 'Create Custom AI Companions',
+            },
+            unit_amount: 999,
+            recurring: {
+              interval: 'month',
+            },
+          },
+          quantity: 1,
+        },
+      ],
+      metadata: {
+        userId,
+      },
+    });
+
+    console.log('Stripe Session:', stripeSession);
+    console.log('Success URL:', stripeSession.success_url);
+    console.log('Cancel URL:', stripeSession.cancel_url);
+
+    return new NextResponse(JSON.stringify({ url: stripeSession.url }));
+  } catch (error) {
+    console.log('[STRIPE]', error);
+    return new NextResponse('Internal Error', { status: 500 });
+  }
 }
