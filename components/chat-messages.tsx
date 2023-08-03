@@ -1,4 +1,5 @@
 // Chat messages component- will list out each message
+// Where we map out the messages
 "use client"
 
 import { Companion } from "@prisma/client";
@@ -48,7 +49,7 @@ export const ChatMessages = ({
                 key={message.content}
                 role={message.role}
                 content={message.content}
-                src={message.src}
+                src={companion.src}
                 />
             ))}
             {isLoading && (

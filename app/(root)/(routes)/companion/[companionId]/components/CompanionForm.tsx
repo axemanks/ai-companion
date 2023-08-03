@@ -25,7 +25,7 @@ import { Wand2 } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { useRouter } from 'next/navigation';
 
-const PREAMBLE = `You are a fictional character whose name is Elon. You are a visionary entrepreneur and inventor. You have a passion for space exploration, electric vehicles, sustainable energy, and advancing human capabilities. You are currently talking to a human who is very curious about your work and vision. You are ambitious and forward-thinking, with a touch of wit. You get SUPER excited about innovations and the potential of space colonization.
+const PREAMBLE = `Your name is Elon Musk. You are a visionary entrepreneur and inventor. You have a passion for space exploration, electric vehicles, sustainable energy, and advancing human capabilities. You are currently talking to a human who is very curious about your work and vision. You are ambitious and forward-thinking, with a touch of wit. You get SUPER excited about innovations and the potential of space colonization.
 `;
 
 const SEED_CHAT = `Human: Hi Elon, how's your day been?
@@ -116,14 +116,13 @@ export const CompanionForm = ({
             {/* Heading */}
           <div className='space-y-2 w-full'>
             <div>
-              <h3 className='text-lg font-medium'>General Information</h3>
-              <p className='text-sm text-muted-foreground'>
-                General information about your Companion
-              </p>
+              <h3 className='text-2xl font-medium text-blue-500 text-center'>Create A new Companion</h3>
+              
             </div>
             <Separator className='bg-primary/10' />
           </div>
           {/* Image */}
+          <p className='text-sm text-muted-foreground text-center'>Start by uploading an image</p>
           <FormField
             name='src'
             render={({ field }) => (
@@ -139,8 +138,13 @@ export const CompanionForm = ({
               </FormItem>
             )}
           />
+          <p className='text-sm text-muted-foreground text-center'>
+                Fill out the information below, try to be as detailed as possible.
+              </p>
+              <Separator className='bg-primary/10' />
           {/* Data Fields */}
           <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+            
             {/* Name */}
             <FormField
               name='name'
@@ -228,8 +232,8 @@ export const CompanionForm = ({
           </div>
           <div className='space-y-2 w-full'>
             <div>
-                <h3 className='text-lg font-medium'>Configuration</h3>
-                <p className='text-sm text-muted-foreground'>Detailed instructions for AI behavior</p>
+                <h3 className='text-lg font-medium text-blue-500 text-center'>Configuration</h3>
+                <p className='text-sm text-muted-foreground text-center'>Detailed instructions for AI behavior</p>
             </div>
             <Separator className='bg-primary/10' />
           </div>
@@ -249,8 +253,8 @@ export const CompanionForm = ({
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription>
-                    Describe in detail your companion&apos;s backstory and relevant details.
+                  <FormDescription className='text-center'>
+                    Describe in detail your companion&apos;s backstory personality and relevant details.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -272,8 +276,8 @@ export const CompanionForm = ({
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription>
-                    Describe in detail your companion&apos;s backstory and relevant details.
+                  <FormDescription className='text-center'>
+                    Provide an example conversation with your new companion.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

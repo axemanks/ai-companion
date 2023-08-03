@@ -26,7 +26,7 @@ export async function POST(
             return new NextResponse("Unauthorized", { status: 401 });
         }
 
-        // identifier for rate limiting - needs to be unique for each user
+        // Rate Limit- identifier for rate limiting - needs to be unique for each user
         // in order to block that specific user and not the whole route
         const identifier = request.url + "-" + user.id;
         // extract success from rateLimit
