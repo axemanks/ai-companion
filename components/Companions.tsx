@@ -48,7 +48,8 @@ export const Companions = ({
                             <div className="relative w-32 h-32">
                                 <Image 
                                 src={item.src} 
-                                fill 
+                                fill
+                                sizes="25vw"
                                 className="rounded-xl object-cover" 
                                 alt="Companion"
                                 />

@@ -1,4 +1,4 @@
-// Dynamic page for each companion
+// Dynamic route for companionId - loads the companion by ID
 
 import prismadb from "@/lib/prismadb";
 import { CompanionForm } from "./components/CompanionForm";
