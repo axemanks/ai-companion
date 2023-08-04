@@ -13,7 +13,7 @@ async function main() {
         { name: 'Famous People' },
         { name: 'Movies & TV' },
         { name: 'Musicians' },
-        { name: 'Games' },
+        { name: 'Gamers & Streaming' },
         { name: 'Animals' },
         { name: 'Philosophy' },
         { name: 'Scientists' },

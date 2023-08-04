@@ -18,7 +18,13 @@ import {
 import { Separator } from '@/components/ui/separator';
 import { ImageUpload } from '@/components/image-upload';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from '@/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Wand2 } from 'lucide-react';
@@ -40,7 +46,6 @@ Elon: Absolutely! Sustainable energy is crucial both on Earth and for our future
 Human: It's fascinating to see your vision unfold. Any new projects or innovations you're excited about?
 Elon: Always! But right now, I'm particularly excited about Neuralink. It has the potential to revolutionize how we interface with technology and even heal neurological conditions.
 `;
-
 
 interface CompanionFormProps {
   initialData: Companion | null;
@@ -96,13 +101,12 @@ export const CompanionForm = ({
         await axios.post(`/api/companion`, values);
       }
       // success toast - default = success
-      toast({ variant: "default", description: "Companion saved!"})
-       router.refresh(); // refresh server components
-       router.push("/")
+      toast({ variant: 'default', description: 'Companion saved!' });
+      router.refresh(); // refresh server components
+      router.push('/');
     } catch (error) {
       // error toast
-      toast({ variant: "destructive", description: "Something went wrong!"})
-      
+      toast({ variant: 'destructive', description: 'Something went wrong!' });
     }
   };
 
@@ -113,16 +117,19 @@ export const CompanionForm = ({
           onSubmit={form.handleSubmit(onSubmit)}
           className='space-y-8 pb-10'
         >
-            {/* Heading */}
+          {/* Heading */}
           <div className='space-y-2 w-full'>
             <div>
-              <h3 className='text-2xl font-medium text-blue-500 text-center'>Create A new Companion</h3>
-              
+              <h3 className='text-2xl font-medium text-sky-500 text-center'>
+                Create A new Companion
+              </h3>
             </div>
             <Separator className='bg-primary/10' />
           </div>
           {/* Image */}
-          <p className='text-sm text-muted-foreground text-center'>Start by uploading an image</p>
+          <p className='text-sm text-muted-foreground text-center'>
+            Start by uploading an image
+          </p>
           <FormField
             name='src'
             render={({ field }) => (
@@ -139,12 +146,11 @@ export const CompanionForm = ({
             )}
           />
           <p className='text-sm text-muted-foreground text-center'>
-                Fill out the information below, try to be as detailed as possible.
-              </p>
-              <Separator className='bg-primary/10' />
+            Fill out the information below, try to be as detailed as possible.
+          </p>
+          <Separator className='bg-primary/10' />
           {/* Data Fields */}
           <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-            
             {/* Name */}
             <FormField
               name='name'
@@ -194,101 +200,107 @@ export const CompanionForm = ({
               render={({ field }) => (
                 // dropdown
                 <FormItem>
-                    <FormLabel>Category</FormLabel>
-                    <Select
+                  <FormLabel>Category</FormLabel>
+                  <Select
                     disabled={isLoading}
                     onValueChange={field.onChange}
                     value={field.value}
                     defaultValue={field.value}
-                    >
-                        <FormControl>
-                            <SelectTrigger className='bg-background'>
-                                <SelectValue 
-                                defaultValue={field.value} 
-                                placeholder='Select a category'
-                                />
-
-                            </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                            {categories.map((category) => (
-                                <SelectItem
-                                key={category.id}
-                                value={category.id}
-                                >
-                                    {category.name}
-                                </SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
-                    <FormDescription>
-                        Select a category for your AI Companion.
-                    </FormDescription>
-                    <FormMessage />
+                  >
+                    <FormControl>
+                      <SelectTrigger className='bg-background'>
+                        <SelectValue
+                          defaultValue={field.value}
+                          placeholder='Select a category'
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {categories.map((category) => (
+                        <SelectItem
+                          key={category.id}
+                          value={category.id}
+                        >
+                          {category.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>
+                    Select a category for your AI Companion.
+                  </FormDescription>
+                  <FormMessage />
                 </FormItem>
               )}
             />
-            
           </div>
           <div className='space-y-2 w-full'>
             <div>
-                <h3 className='text-lg font-medium text-blue-500 text-center'>Configuration</h3>
-                <p className='text-sm text-muted-foreground text-center'>Detailed instructions for AI behavior</p>
+              <h3 className='text-lg font-medium text-sky-500 text-center'>
+                Configuration
+              </h3>
+              <p className='text-sm text-muted-foreground text-center'>
+                Detailed instructions for AI behavior
+              </p>
             </div>
             <Separator className='bg-primary/10' />
           </div>
           {/* Instructions */}
           <FormField
-              name='instructions'
-              control={form.control}
-              render={({ field }) => (
-                <FormItem className='col-span-2 md:col-span-1'>
-                  <FormLabel>Instructions</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      className='bg-background resize-none'
-                      rows={7}
-                      disabled={isLoading}
-                      placeholder={PREAMBLE}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormDescription className='text-center'>
-                    Describe in detail your companion&apos;s backstory personality and relevant details.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            {/* Seed */}
+            name='instructions'
+            control={form.control}
+            render={({ field }) => (
+              <FormItem className='col-span-2 md:col-span-1'>
+                <FormLabel>Instructions</FormLabel>
+                <FormControl>
+                  <Textarea
+                    className='bg-background resize-none'
+                    rows={7}
+                    disabled={isLoading}
+                    placeholder={PREAMBLE}
+                    {...field}
+                  />
+                </FormControl>
+                <FormDescription className='text-center'>
+                  Describe in detail your companion&apos;s backstory personality
+                  and relevant details.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          {/* Seed */}
           <FormField
-              name='seed'
-              control={form.control}
-              render={({ field }) => (
-                <FormItem className='col-span-2 md:col-span-1'>
-                  <FormLabel>Example Conversation</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      className='bg-background resize-none'
-                      rows={7}
-                      disabled={isLoading}
-                      placeholder={SEED_CHAT}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormDescription className='text-center'>
-                    Provide an example conversation with your new companion.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <div className='w-full flex justify-center'>
-                <Button size="lg" disabled={isLoading}>
-                    {initialData ? "Edit your Companion" : "Create your Companion"}
-                    <Wand2 className='w-4 h-4 ml-2' />
-                </Button>
-            </div>
+            name='seed'
+            control={form.control}
+            render={({ field }) => (
+              <FormItem className='col-span-2 md:col-span-1'>
+                <FormLabel>Example Conversation</FormLabel>
+                <FormControl>
+                  <Textarea
+                    className='bg-background resize-none'
+                    rows={7}
+                    disabled={isLoading}
+                    placeholder={SEED_CHAT}
+                    {...field}
+                  />
+                </FormControl>
+                <FormDescription className='text-center'>
+                  Provide an example conversation with your new companion.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <div className='w-full flex justify-center'>
+            <Button
+              size='lg'
+              disabled={isLoading}
+            >
+              {initialData ? 'Edit your Companion' : 'Create your Companion'}
+              <Wand2 className='w-4 h-4 ml-2' />
+            </Button>
+          </div>
         </form>
       </Form>
     </div>

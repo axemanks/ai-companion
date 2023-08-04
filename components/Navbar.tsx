@@ -36,7 +36,7 @@ export const Navbar = ({
             <MobileSidebar />
         <Link href="/" >
             {/* use cn here to add poppins(font.className) after tailwinds classes */}
-            <h1 className={cn("hidden md:block text-xl md:text-3xl font-bold text-primary", font.className)}>companion.ai</h1>
+            <h1 className={cn("hidden md:block text-xl md:text-3xl font-bold text-primary text-sky-500", font.className)}>companion.ai</h1>
         </Link>
         </div>
         {/* User button */}

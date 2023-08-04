@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useProModal } from "@/hooks/use-pro-modal"; // hook to open and close
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "./ui/dialog"
 import { Separator } from "./ui/separator";
@@ -12,6 +12,12 @@ export const ProModal = () => {
     const proModal = useProModal();
     const { toast } = useToast();
     const [loading, setLoading] = useState(false);
+
+    // Hydration trick
+    const [isMounted, setIsMounted] = useState(false);
+    useEffect(() => {
+        setIsMounted(true);
+    }, [])
 
     // Subscribe
     const onSubscribe = async ()  => {
@@ -34,6 +40,12 @@ export const ProModal = () => {
             setLoading(false);
         }
     }
+
+    if(!isMounted){
+         return null
+        }; // hydration trick 
+
+
     return (
         <Dialog
         // add hooks- from zustand modal store
