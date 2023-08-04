@@ -12,5 +12,8 @@ Pinecone and Redis for memory and vector embeddings
 Memory Manger - lib/memory
 Class to handle the chat memory
 
-Personalitys:
-Shakira
+If you need to reset the database:
+npx prisma migrate reset - this will delete everything
+npx prisma generate
+npx prisma db push
+npm run seed

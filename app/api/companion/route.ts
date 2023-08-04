@@ -1,4 +1,5 @@
 // api/companion/route.ts endpoint
+// this will create a new companion and save to prisma
 
 import prismadb from "@/lib/prismadb";
 import { checkSubscription } from "@/lib/subscription";

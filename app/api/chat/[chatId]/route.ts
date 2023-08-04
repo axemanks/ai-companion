@@ -1,4 +1,5 @@
 // Dynamic route based on chatId
+// Takes a prompt and posts it to the messages for that companion
 import dotenv from "dotenv";
 import { StreamingTextResponse, LangChainStream} from 'ai';
 import { auth, currentUser} from "@clerk/nextjs";
@@ -21,8 +22,10 @@ export async function POST(
         const { prompt } = await request.json();
         // get user from clerk
         const user = await currentUser();
+        console.log("user data from clerk: ",user)
         // check if info is missing
-        if (!user || !user.firstName || !user.id) {
+        // removed !user.firstName from if statement
+        if (!user || !user.id) {
             return new NextResponse("Unauthorized", { status: 401 });
         }
 
