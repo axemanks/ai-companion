@@ -8,6 +8,7 @@ import { absoluteUrl } from '@/lib/utils';
 // Todo- needed to hard code the settingsURL to "http://localhost:3000/settings"
 // find out why
 const settingsUrl = absoluteUrl('/settings');
+console.log('settingsUrl:', settingsUrl)
 
 export async function GET() {
   try {
@@ -28,6 +29,7 @@ export async function GET() {
     //console.log("User Sub:", userSubscription)
     //console.log("Stripe Customer Id:", userSubscription?.stripeCustomerId)
 
+    // If there is a subscription, create a billing portal session
     if (userSubscription && userSubscription.stripeCustomerId) {
       const stripeSession = await stripe.billingPortal.sessions.create({
         customer: userSubscription.stripeCustomerId,
