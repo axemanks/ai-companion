@@ -17,13 +17,15 @@ export async function POST(req: Request) {
         if(!user || !user.id) {
             return new NextResponse("Unauthorized", {status: 401})
         }
+       
         // Clerk may not return a first name as it's not required, so we need to create a name for them
         // we can slice the email address at the @ symbol and use that as a name
+        let firstName = '';
         if (!user.firstName) {
-        let firstName = user.emailAddresses[0].emailAddress.split('@')[0]; // get first email address and split at @ symbol
-        user.firstName = firstName; // set as the fistname
+            firstName = user.emailAddresses[0].emailAddress.split('@')[0]; // get first email address and split at @ symbol
+        } else {
+            firstName = user.firstName;
         }
-
 
         // check if data missing from fields
         if (!src || !name || !description || !instructions || !seed || !categoryId) {
@@ -36,13 +38,11 @@ export async function POST(req: Request) {
             return new NextResponse("Pro Subscription Required", { status: 403 })
         }
 
-
-
         const companion = await prismadb.companion.create({
             data: {
             categoryId,
-            userId: user.id,
-            userName: user.firstName,
+            userId: user.id || firstName,
+            userName: firstName,
             src,
             name,
             description,
