@@ -1,4 +1,6 @@
-// Dynamic route for companionId - loads the companion by ID
+// Create a new companion
+// fetches initialData 
+// loads form with initialData
 
 import prismadb from "@/lib/prismadb";
 import { CompanionForm } from "./components/CompanionForm";
@@ -18,7 +20,6 @@ const CompanionIdPage = async ({
     if(!userId){
         return redirectToSignIn();
     }
-    // Todo Check subscription
 
     // fetch compaion via id
     const companion = await prismadb.companion.findUnique({
