@@ -5,29 +5,26 @@ import prismadb from '@/lib/prismadb';
 import { stripe } from '@/lib/stripe';
 import { absoluteUrl } from '@/lib/utils';
 
-// Todo- needed to hard code the settingsURL to "http://localhost:3000/settings"
-// find out why
+// function to get url to pass to stripe - from lib\utils.ts
 const settingsUrl = absoluteUrl('/settings');
-console.log('settingsUrl:', settingsUrl)
+
 
 export async function GET() {
   try {
     const { userId } = auth();
     const user = await currentUser();
-    //console.log("user", user)
-    //console.log('userId', userId)
+    
     if (!userId || !user) {
       return new NextResponse('Unauthorized', { status: 401 });
     }
-    //console.log("Attempting to find subscription")
+    
     const userSubscription = await prismadb.userSubscription.findUnique({
       where: {
         userId,
       },
     });
 
-    //console.log("User Sub:", userSubscription)
-    //console.log("Stripe Customer Id:", userSubscription?.stripeCustomerId)
+    
 
     // If there is a subscription, create a billing portal session
     if (userSubscription && userSubscription.stripeCustomerId) {
@@ -38,7 +35,7 @@ export async function GET() {
 
       return new NextResponse(JSON.stringify({ url: stripeSession.url }));
     }
-    //console.log("No sub found, creating checkout session...")
+    
     const stripeSession = await stripe.checkout.sessions.create({
       success_url: settingsUrl,
       cancel_url: settingsUrl,
@@ -67,9 +64,6 @@ export async function GET() {
       },
     });
 
-    console.log('Stripe Session:', stripeSession);
-    console.log('Success URL:', stripeSession.success_url);
-    console.log('Cancel URL:', stripeSession.cancel_url);
 
     return new NextResponse(JSON.stringify({ url: stripeSession.url }));
   } catch (error) {
